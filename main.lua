@@ -1,20 +1,118 @@
 if not zanncModMain.Config.Enabled then return end
 
 local dataconfigs = {
-    MaxChoices = 5
-    -- ButtonSpacingY = 160 or 256,
+    MaxChoices = 5,
+    ButtonSpacingY = 160,
+
+    RarityText =
+	{
+		FontSize = 27,
+		OffsetX = 340, OffsetY = -60,
+		Width = 720,
+		Color = color,
+		Font = "P22UndergroundSCMedium",
+		ShadowBlur = 0, ShadowColor = {0,0,0,1}, ShadowOffset={0, 2},
+		Justification = "Right",
+		DataProperties =
+		{
+			OpacityWithOwner = true,
+		},
+	},
+
+	TitleText =
+	{
+		FontSize = 27,
+		OffsetX = -320, OffsetY = -60,
+		Font = "P22UndergroundSCMedium",
+		ShadowBlur = 0, ShadowColor = {0,0,0,1}, ShadowOffset={0, 2},
+		Justification = "Left",
+		LuaKey = "TooltipData",
+		LuaValue = {},
+		DataProperties =
+		{
+			OpacityWithOwner = true,
+		},
+	},
+
+    DescriptionText =
+    {
+		OffsetX = -320,
+		OffsetY = -35,
+		Width = 710,
+		Justification = "Left",
+		VerticalJustification = "Top",
+		LineSpacingBottom = 5,
+		LuaKey = "TooltipData",
+		LuaValue = {},
+		Format = "BaseFormat",
+		UseDescription = true,
+		VariableAutoFormat = "BoldFormatGraft",
+		TextSymbolScale = 0.8,
+		DataProperties =
+		{
+			OpacityWithOwner = true,
+		},
+	},
+
+    StatLineLeft =
+	{
+		OffsetX = -320,
+		Width = 420,
+		Justification = "Left",
+		VerticalJustification = "Top",
+		LineSpacingBottom = 5,
+		LuaKey = "TooltipData",
+		LuaValue = {},
+		Format = "BaseFormat",
+		VariableAutoFormat = "BoldFormatGraft",
+		TextSymbolScale = 0.8,
+	},
+
+	StatLineRight =
+	{
+		OffsetX = 30,
+		Width = 485,
+		Justification = "Left",
+		VerticalJustification = "Top",
+		LineSpacingBottom = 5,
+		UseDescription = true,
+		LuaKey = "TooltipData",
+		LuaValue = {},
+		Format = "BaseFormat",
+		VariableAutoFormat = "BoldFormatGraft",
+		TextSymbolScale = 0.8,
+	},
+
+	FlavorText = 
+	{	
+		OffsetX = -320,
+		OffsetY = 80,
+		Width = 700,
+		Color = Color.FlavorTextPurple,
+		Font = "LatoItalic",
+		FontSize = 18,
+		ShadowBlur = 0, ShadowColor = {0, 0, 0, 1}, ShadowOffset = {0, 2},
+		Justification = "Left",
+	},
 }
 
 OnAnyLoad{ function()
     ScreenData.UpgradeChoice.MaxChoices = dataconfigs.MaxChoices
-    -- ScreenData.UpgradeChoice.ButtonSpacingY = dataconfigs.ButtonSpacingY
+    ScreenData.UpgradeChoice.ButtonSpacingY = dataconfigs.ButtonSpacingY
+    ScreenData.UpgradeChoice.RarityText = dataconfigs.RarityText
+    ScreenData.UpgradeChoice.TitleText = dataconfigs.TitleText
+    ScreenData.UpgradeChoice.DescriptionText = dataconfigs.DescriptionText
+
+    ScreenData.UpgradeChoice.StatLineLeft = dataconfigs.StatLineLeft
+    ScreenData.UpgradeChoice.StatLineRight = dataconfigs.StatLineRight
+    ScreenData.UpgradeChoice.FlavorText = dataconfigs.FlavorText
 end}
 
 ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, itemIndex, itemData  )
 	local components = screen.Components
 	local upgradeName = lootData.Name
 	local upgradeChoiceData = lootData
-	local itemLocationY = (ScreenCenterY - 190) + screen.ButtonSpacingY * ( itemIndex - 1 )
+	local itemLocationY = (ScreenCenterY - 240) + screen.ButtonSpacingY * ( itemIndex - 1 )
 	local itemLocationX = ScreenCenterX - 355
 	local blockedIndexes = screen.BlockedIndexes
 	local upgradeData = nil
@@ -101,6 +199,7 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 	local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
 	purchaseButton.X = itemLocationX + screen.ButtonOffsetX
 	purchaseButton.Y = itemLocationY
+    purchaseButton.Scale = 0.7
 	--DebugPrint({ Text = "upgradeData.Rarity = "..upgradeData.Rarity })
 	local backingAnim = upgradeData.UpgradeChoiceBackingAnimation or screen.RarityBackingAnimations[upgradeData.Rarity]
 	if backingAnim ~= nil then
@@ -130,6 +229,7 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 	local highlight = ShallowCopyTable( screen.Highlight )
 	highlight.X = purchaseButton.X
 	highlight.Y = purchaseButton.Y
+    highlight.Scale = purchaseButton.Scale
 	components[purchaseButtonKey.."Highlight"] = CreateScreenComponent( highlight )
 
 	if upgradeData.Icon ~= nil then
@@ -173,6 +273,7 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 	local frame = screen.Frame
 	frame.X = screen.IconOffsetX + itemLocationX + screen.ButtonOffsetX
 	frame.Y = screen.IconOffsetY + itemLocationY
+    -- frame.scale = purchaseButton.Scale
 	frame.Animation = GetTraitFrame( upgradeData )
 	components[purchaseButtonKey.."Frame"] = CreateScreenComponent( frame )
 
@@ -220,12 +321,14 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 	end
 
 	local rarityText = ShallowCopyTable( screen.RarityText )
+    rarityText.Scale = 0.8
 	rarityText.Id = button.Id
 	rarityText.Text = text
 	rarityText.Color = color
 	CreateTextBox( rarityText )
 
 	local titleText = ShallowCopyTable( screen.TitleText )
+    titleText.Scale = rarityText.Scale
 	titleText.Id = button.Id
 	titleText.Text = upgradeTitle
 	titleText.Color = color
@@ -233,6 +336,7 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 	CreateTextBox( titleText )
 
 	local descriptionText = ShallowCopyTable( screen.DescriptionText )
+    descriptionText.Scale = rarityText.Scale
 	descriptionText.Id = button.Id
 	descriptionText.Text = upgradeDescription
 	descriptionText.LuaValue = tooltipData
@@ -240,6 +344,7 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 
 	if upgradeDescription2 then
 		local descriptionText2 = ShallowCopyTable( screen.DescriptionText )
+        descriptionText2.Scale = rarityText.Scale
 		descriptionText2.Id = button.Id
 		descriptionText2.Text = upgradeDescription2
 		descriptionText2.LuaValue = tooltipData
@@ -262,6 +367,7 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 				end
 
 				local statLineLeft = ShallowCopyTable( screen.StatLineLeft )
+                statLineLeft.Scale = rarityText.Scale
 				statLineLeft.Id = button.Id
 				statLineLeft.Text = statLine
 				statLineLeft.OffsetY = offsetY
@@ -270,6 +376,7 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 				CreateTextBoxWithFormat( statLineLeft )
 
 				local statLineRight = ShallowCopyTable( screen.StatLineRight )
+                statLineRight.Scale = rarityText.Scale
 				statLineRight.Id = button.Id
 				statLineRight.Text = statLine
 				statLineRight.OffsetY = offsetY
@@ -283,6 +390,7 @@ ModUtil.Path.Override("CreateUpgradeChoiceButton", function( screen, lootData, i
 
 	if traitData.FlavorText ~= nil then
 		local flavorText = ShallowCopyTable( screen.FlavorText )
+        flavorText.Scale = rarityText.Scale
 		flavorText.Id = button.Id
 		flavorText.Text = traitData.FlavorText
 		CreateTextBox( flavorText )
