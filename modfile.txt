@@ -1,1 +1,2 @@
-Import "zanncmain.lua"
+Top Import "config.lua"
+Import "main.lua"
