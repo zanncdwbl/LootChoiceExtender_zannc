@@ -1,16 +1,33 @@
 if not zanncModMain.Config.Enabled then return end
 
 local dataconfigs = {
-    ExtraChoices = 1
+    ExtraChoices = 2
 }
+
+-- OnAnyLoad{ function()
+-- 	ScreenData.UpgradeChoice.MaxChoices = ScreenData.UpgradeChoice.MaxChoices + dataconfigs.ExtraChoices
+-- end}
+
+-- ModUtil.Path.Override("GetTotalLootChoices", function( )
+-- 	return ScreenData.UpgradeChoice.MaxChoices
+-- end, zanncModMain)
 
 OnAnyLoad{ function()
 	ScreenData.UpgradeChoice.MaxChoices = ScreenData.UpgradeChoice.MaxChoices + dataconfigs.ExtraChoices
 end}
 
 ModUtil.Path.Override("GetTotalLootChoices", function( )
-	return ScreenData.UpgradeChoice.MaxChoices
+	return ScreenData.UpgradeChoice.MaxChoices or zanncModMain.Choices
 end, zanncModMain)
+
+ModUtil.Path.Override("CalcNumLootChoices", function( )
+	local numChoices = ScreenData.UpgradeChoice.MaxChoices - GetNumMetaUpgrades("ReducedLootChoicesShrineUpgrade")
+	if (isGodLoot or treatAsGodLootByShops) and HasHeroTraitValue("RestrictBoonChoices") then
+		numChoices = numChoices - 1
+	end
+	return numChoices
+end, zanncModMain)
+
 
 ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen, lootData, itemIndex, itemData )
     local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
