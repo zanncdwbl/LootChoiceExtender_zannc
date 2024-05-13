@@ -105,33 +105,35 @@ ModUtil.Path.Override("GetTotalLootChoices", function( )
 end, zanncModMain)
 
 ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen, lootData, itemIndex, itemData )
+    local itemLocationY = (ScreenCenterY - 220) + screen.ButtonSpacingY * ( itemIndex - 1 ) -- Doing this just to have more space tbh.
     local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
     local data = { }
 
     if purchaseButton.Name == "BoonSlotBase" and purchaseButton.Group == "Combat_Menu" then
-        screen.ButtonSpacingY = 160
-        screen.PurchaseButton.Scale = 1.0 * (data.squashY ^ (1/3))
-        screen.Highlight.Scale = screen.PurchaseButton.Scale
-    end
-
-    ModUtil.Path.Wrap("CreateTextBox", function( base, args )
         local locals = ModUtil.Locals.Stacked( )
         data.upgrade = locals.upgradeData
 
         local excess = math.max( 3, #locals.upgradeOptions )-3
         data.squashY = 3/(3+excess)
+        
+        purchaseButton.Y = itemLocationY
+        screen.PurchaseButton.Scale = 1.0 * (data.squashY ^ (1/3))
+        screen.Highlight.Scale = screen.PurchaseButton.Scale
+    end
 
-        -- if args.OffsetY then 
-        --     args.OffsetY = args.OffsetY*data.squashY 
-        -- end
+    local buttonspacingY = screen.ButtonSpacingY
+    screen.ButtonSpacingY = buttonspacingY * (data.squashY ^ (1/3))
+
+    ModUtil.Path.Wrap("CreateTextBox", function( base, args )
         if args.FontSize then 
             args.FontSize = args.FontSize * (data.squashY ^ (1/3))
         end
-        if data.upgrade and args.Text == data.upgrade.CustomRarityName then 
-            ModUtil.Locals.Stacked( ).lineSpacing = 8*data.squashY
-        end
-		return base( args )
-	end)
+        -- if data.upgrade and args.Text == data.upgrade.CustomRarityName then 
+        --     ModUtil.Locals.Stacked( ).lineSpacing = 8*data.squashY
+        -- end
+        return base( args )
+    end)
+
 end)
 
 -- ModUtil.Path.Wrap("CreateUpgradeChoiceButton", function()
