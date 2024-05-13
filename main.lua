@@ -1,19 +1,24 @@
 if not zanncModMain.Config.Enabled then return end
 
 local dataconfigs = {
-    ExtraChoices = 2
+    ExtraChoices = 3
 }
 
--- OnAnyLoad{ function()
--- 	ScreenData.UpgradeChoice.MaxChoices = ScreenData.UpgradeChoice.MaxChoices + dataconfigs.ExtraChoices
--- end}
+-- =======================================================================
+-- Yeah I don't even know, but this works perfectly - sorry had to steal
+-- =======================================================================
 
--- ModUtil.Path.Override("GetTotalLootChoices", function( )
--- 	return ScreenData.UpgradeChoice.MaxChoices
--- end, zanncModMain)
+local baseChoices = GetTotalLootChoices()
+
+-- Other mods should override this value
+zanncModMain.Choices = baseChoices
+
+zanncModMain.GetBaseChoices = function( )
+	return baseChoices
+end
 
 OnAnyLoad{ function()
-	ScreenData.UpgradeChoice.MaxChoices = ScreenData.UpgradeChoice.MaxChoices + dataconfigs.ExtraChoices
+	ScreenData.UpgradeChoice.MaxChoices = zanncModMain.Choices + dataconfigs.ExtraChoices
 end}
 
 ModUtil.Path.Override("GetTotalLootChoices", function( )
@@ -28,38 +33,34 @@ ModUtil.Path.Override("CalcNumLootChoices", function( )
 	return numChoices
 end, zanncModMain)
 
-
 ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen, lootData, itemIndex, itemData )
     local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
-
-    -- local itemLocationY = (ScreenCenterY - 220) + screen.ButtonSpacingY * ( itemIndex - 1 )
-    -- screen.ButtonSpacingY = ScreenData.UpgradeChoice.ButtonSpacingY / ((dataconfigs.ExtraChoices + 3) ^ (1/3))
-    -- ModUtil.Hades.PrintStack(screen.ButtonSpacingY)
-
     local data = { }
-    if purchaseButton.Name == "BoonSlotBase" and purchaseButton.Group == "Combat_Menu" then
+    if purchaseButton.Name == "BoonSlotBase" and purchaseButton.Group == "Combat_Menu" then -- hopefully to stop breaking the codex/arachne/echo etc
         local locals = ModUtil.Locals.Stacked( )
         data.upgrade = locals.upgradeData
 
-        -- local excess = math.max( 3, #locals.upgradeOptions ) - 3
-        -- data.squashY = 3/(3+excess)
+        local excess = math.max( 3, #locals.upgradeOptions ) - 3
+        data.squashY = 3/(3+excess)
         
-        ModUtil.Hades.PrintStack(data.upgrade)
+        local itemLocationY = (ScreenCenterY - 230) + screen.ButtonSpacingY * ( itemIndex - 1 ) -- Doing this for more space
+        screen.ButtonSpacingY = ScreenData.UpgradeChoice.ButtonSpacingY * (data.squashY ^ 1.1) -- Spacing between buttons automatically to scale
+        ModUtil.Hades.PrintStack(screen.ButtonSpacingY)
 
-        -- screen.PurchaseButton.Y = itemLocationY
-        -- screen.PurchaseButton.Scale = 0.6
-        -- screen.Highlight.Scale = screen.PurchaseButton.Scale
+        screen.PurchaseButton.Y = itemLocationY -- dunno if i need this but will keep so location stops crying
+        screen.PurchaseButton.Scale = 1.0 * (data.squashY ^ (2/3)) -- Scaling the buttons, unsure how to get it to scale nicely like in hades 1
+        screen.Highlight.Scale = screen.PurchaseButton.Scale -- same as purchaseButton scaling
     end
 
-    -- ModUtil.Path.Wrap("CreateTextBox", function( base, args )
-    --     if args.FontSize then 
-    --         args.FontSize = args.FontSize * (data.squashY ^ (1/3))
-    --     end
-    --     -- if data.upgrade and args.Text == data.upgrade.CustomRarityName then 
-    --     --     ModUtil.Locals.Stacked( ).lineSpacing = 8*data.squashY
-    --     -- end
-    --     return base( args )
-    -- end)
+    ModUtil.Path.Wrap("CreateTextBox", function( base, args )
+        if args.FontSize then 
+            args.FontSize = args.FontSize * (data.squashY ^ (1/3))
+        end
+        -- if data.upgrade and args.Text == data.upgrade.CustomRarityName then 
+        --     ModUtil.Locals.Stacked( ).lineSpacing = 8*data.squashY
+        -- end
+        return base( args )
+    end)
 end)
 
 ModUtil.Path.Override("DestroyBoonLootButtons", function( screen, lootData )
