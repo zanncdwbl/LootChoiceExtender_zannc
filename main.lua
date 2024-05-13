@@ -104,8 +104,11 @@ ModUtil.Path.Override("GetTotalLootChoices", function( )
 	return ScreenData.UpgradeChoice.MaxChoices
 end, zanncModMain)
 
-ModUtil.Path.Wrap("CreateUpgradeChoiceButton", function ( screen, lootData, itemIndex, itemData )
-    
+ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen, lootData, itemIndex, itemData )
+    local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
+    if purchaseButton.Name == "BoonSlotBase" then
+        screen.ButtonSpacingY = 160
+    end
 end)
 
 -- ModUtil.Path.Wrap("CreateUpgradeChoiceButton", function()
