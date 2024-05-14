@@ -60,16 +60,15 @@ ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen, lootDa
                 args.Y = local_hades.itemLocationY
                 args.Scale = 1.0 * (data.squash ^ 0.7)
                 screen.Highlight.Scale = args.Scale -- Can't find a good way to do this
+            end
+            -- Icons etc cause I can't find a good way to do this either
+            if data.upgrade.Icon ~= nil then
+                local icon = screen.Icon
+                icon.X = (screen.IconOffsetX + local_hades.itemLocationX + screen.ButtonOffsetX) * data.squash -- Doesn't even work lol
+                icon.Scale = 0.6 * (data.squash ^ 0.7)
 
-                -- Icons etc cause I can't find a good way to do this either
-                if data.upgrade.Icon ~= nil then
-                    local icon = screen.Icon
-                    icon.X = (screen.IconOffsetX + local_hades.itemLocationX + screen.ButtonOffsetX) * data.squash -- Doesn't even work lol
-                    icon.Scale = 0.6 * (data.squash ^ 0.7)
-
-                    screen.Frame.X = icon.X
-                    screen.Frame.Scale = screen.Icon.Scale
-                end
+                screen.Frame.X = icon.X
+                screen.Frame.Scale = screen.Icon.Scale
             end
             -- if args.Name == "BlankObstacle" then
             --     local_hades.itemLocationY = local_hades.itemLocationY + 100 * (data.squash - 1)
