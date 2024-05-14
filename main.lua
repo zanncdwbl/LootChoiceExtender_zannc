@@ -1,7 +1,7 @@
 if not zanncModMain.Config.Enabled then return end
 
 local dataconfigs = {
-    ExtraChoices = 5
+    ExtraChoices = 2
 }
 
 -- =======================================================================
@@ -42,24 +42,23 @@ ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen, lootDa
 
         local excess = math.max( 3, #locals.upgradeOptions ) - 3
         data.squash = 3/(3+excess)
-        
-        local itemLocationY = (ScreenCenterY - 190) + screen.ButtonSpacingY * ( itemIndex - 1 ) -- Doing this for more space
-        screen.ButtonSpacingY = ScreenData.UpgradeChoice.ButtonSpacingY * (data.squash ^ 1.1) -- Spacing between buttons automatically to scale
+    
+        screen.ButtonSpacingY = ScreenData.UpgradeChoice.ButtonSpacingY * (data.squash ^ 1) -- Spacing between buttons automatically to scale - Lower 0.8 for more space
         -- ModUtil.Hades.PrintStack(screen.ButtonSpacingY)
 
         screen.PurchaseButton.Y = itemLocationY -- dunno if i need this but will keep so location stops crying
-        screen.PurchaseButton.Scale = 1.0 * (data.squash ^ 0.8) -- Scaling the buttons, unsure how to get it to scale (specifically the X scaling) nicely like in hades 1
+        screen.PurchaseButton.Scale = 1.0 * (data.squash ^ 0.8) -- Scaling the buttons, unsure how to get it to scale (specifically the X scaling) nicely like in hades 1 - increase 0.8 for harsher scaling
         screen.Highlight.Scale = screen.PurchaseButton.Scale -- same as purchaseButton scaling
     end
 
     ModUtil.Path.Wrap("CreateTextBox", function( base, args )
         if args.OffsetY and args.OffsetX then 
-            args.OffsetY = args.OffsetY * (data.squash * 0.8) 
-            args.OffsetX = args.OffsetX * (data.squash * 0.4)
+            args.OffsetY = args.OffsetY * (data.squash ^ 0.55)
+            args.OffsetX = args.OffsetX * (data.squash ^ 0.6)
         end
 
         if args.FontSize then 
-            args.FontSize = args.FontSize * (data.squash ^ 0.8)
+            args.FontSize = args.FontSize * (data.squash ^ 0.5)
         end
         -- if data.upgrade and args.Text == data.upgrade.CustomRarityName then 
         --     ModUtil.Locals.Stacked( ).lineSpacing = 8*data.squashY
