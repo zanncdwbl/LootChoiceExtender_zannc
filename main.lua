@@ -40,8 +40,7 @@ ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen, lootDa
         local locals = ModUtil.Locals.Stacked( )
         data.upgrade = locals.upgradeData
 
-        local excess = math.max( 3, #locals.upgradeOptions ) - 3
-        data.squash = 3/(3+excess)
+        data.squash = 3/(3+dataconfigs.ExtraChoices)
     
         screen.ButtonSpacingY = ScreenData.UpgradeChoice.ButtonSpacingY * (data.squash ^ 1) -- Spacing between buttons automatically to scale - Lower 0.8 for more space
         -- ModUtil.Hades.PrintStack(screen.ButtonSpacingY)
