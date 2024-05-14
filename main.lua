@@ -1,7 +1,9 @@
 if not zanncModMain.Config.Enabled then return end
 
 local dataconfigs = {
-    --Max of like 6, before it starts breaking
+    -- Max of like 6, before it starts breaking
+    -- 4 And it still looks okay
+    -- 2 if you want it to still look good 
     ExtraChoices = 2
 }
 
@@ -34,6 +36,9 @@ ModUtil.Path.Override("CalcNumLootChoices", function( )
 	return numChoices
 end, zanncModMain)
 
+
+--Absolutely unsure how to fix arache etc, they use the same name and group, but their choices dont go up, unless I want to increase their choices too
+-- No reason to increase their choices at the moment.
 ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen )
     -- local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
 	-- local highlight = ShallowCopyTable( screen.Highlight )
@@ -47,13 +52,16 @@ ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen )
             local local_hades = ModUtil.Locals.Stacked( )
 
             data.upgrade = local_hades.upgradeData
-            data.squash = 3/(3+dataconfigs.ExtraChoices)
-
+            data.squash = 3/(3+dataconfigs.ExtraChoices) -- I cannot do the previous excess method as it crashes when using rarity (I don't want to figure it out anymore)
+            -- I just want to be happy please
             if args.Name == "BoonSlotBase" then
-                local_hades.itemLocationY = local_hades.itemLocationY + 100 * (data.squash - 1)
+                screen.ButtonSpacingY = 256 * (data.squash ^ 0.9)
+                local_hades.itemLocationY = local_hades.itemLocationY + 160 * (data.squash - 1)
                 args.Y = local_hades.itemLocationY
-                args.Scale = 1.0 * (data.squash ^ 0.4)
+                args.Scale = 1.0 * (data.squash ^ 0.7)
                 screen.Highlight.Scale = args.Scale -- Can't find a good way to do this
+
+                -- Frame and Icons
             end
             -- if args.Name == "BlankObstacle" then
             --     local_hades.itemLocationY = local_hades.itemLocationY + 100 * (data.squash - 1)
@@ -82,9 +90,9 @@ ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen )
             args.OffsetY = args.OffsetY * data.squash
         end
         if args.OffsetX then
-            args.OffsetX = args.OffsetX * (data.squash ^ (1/3))
+            args.OffsetX = args.OffsetX * (data.squash ^ 0.6)
         end
-        if args.FontSize then args.FontSize = args.FontSize * (data.squash ^ (1/3)) end
+        if args.FontSize then args.FontSize = args.FontSize * (data.squash ^ 0.5) end
         if data.upgrade and args.Text == data.upgrade.CustomRarityName then 
             ModUtil.Locals.Stacked( ).lineSpacing = 8*data.squash
         end
