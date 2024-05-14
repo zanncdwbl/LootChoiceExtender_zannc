@@ -39,7 +39,7 @@ end, zanncModMain)
 
 --Absolutely unsure how to fix arache etc, they use the same name and group, but their choices dont go up, unless I want to increase their choices too
 -- No reason to increase their choices at the moment.
-ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen )
+ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen, lootData, itemIndex, itemData )
     -- local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
 	-- local highlight = ShallowCopyTable( screen.Highlight )
 
@@ -61,7 +61,15 @@ ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen )
                 args.Scale = 1.0 * (data.squash ^ 0.7)
                 screen.Highlight.Scale = args.Scale -- Can't find a good way to do this
 
-                -- Frame and Icons
+                -- Icons etc cause I can't find a good way to do this either
+                if data.upgrade.Icon ~= nil then
+                    local icon = screen.Icon
+                    icon.X = (screen.IconOffsetX + local_hades.itemLocationX + screen.ButtonOffsetX) * data.squash -- Doesn't even work lol
+                    icon.Scale = 0.6 * (data.squash ^ 0.7)
+
+                    screen.Frame.X = icon.X
+                    screen.Frame.Scale = screen.Icon.Scale
+                end
             end
             -- if args.Name == "BlankObstacle" then
             --     local_hades.itemLocationY = local_hades.itemLocationY + 100 * (data.squash - 1)
@@ -72,6 +80,7 @@ ModUtil.Path.Context.Wrap("CreateUpgradeChoiceButton", function ( screen )
         local component = base( args ) 
 		return component
     end)
+
     -- if purchaseButton.Group == "Combat_Menu" then -- hopefully to stop breaking the codex/arachne/echo etc
         -- if purchaseButton.Name == "BoonSlotBase" then
         --     screen.ButtonSpacingY = ScreenData.UpgradeChoice.ButtonSpacingY * (data.squash ^ (1/3)) -- Spacing between buttons automatically to scale - Lower 0.8 for more space
