@@ -2,7 +2,7 @@
     "namespace": "zannc",
     "name": "ExtendedChoice",
     "description": "Hades 2 port of LootChoiceExtender from Hades 1 created by Magic_Gonads",
-    "version_number": "0.1",
+    "version_number": "0.0.1",
     "dependencies": [
         "SGG_Modding-ModUtil-3.1.1"
     ],
