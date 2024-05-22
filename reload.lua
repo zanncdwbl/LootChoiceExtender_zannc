@@ -55,15 +55,7 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
 
         --THIS PART DOESNT WORK, ERROR ABOUT LOCALS AND ITEM LOCATION BEING NIL
         if game.ScreenData.UpgradeChoice.PurchaseButton.Name == "BoonSlotBase" then
-            local local_hades = modutil.Locals.Stacked()
-            data.upgrade = local_hades.upgradeData
-            data.squash = 3/(3+config.ExtraChoices) -- I cannot do the previous excess method as it crashes when using rarity (I don't want to figure it out anymore)
-
-            screen.ButtonSpacingY = 256 * (data.squash ^ 0.9)
-            local_hades.itemLocationY = local_hades.itemLocationY + 160 * (data.squash - 1)
-            game.purchaseButton.Y = local_hades.itemLocationY
-            game.purchaseButton.Scale = 1.0 * (data.squash ^ 0.7)
-            screen.Highlight.Scale = game.purchaseButton.Scale -- Can't find a good way to do this
+            game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 100
         end
         
         -- data.upgrade = local_hades.upgradeData
