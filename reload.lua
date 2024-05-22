@@ -17,9 +17,9 @@ function sjson_ShellText(data)
 	end
 end
 
--- function GetTotalLootChoices_override()
---     return game.ScreenData.UpgradeChoice.MaxChoices or zanncModMain.Choices
--- end
+function GetTotalLootChoices_override()
+    return game.ScreenData.UpgradeChoice.MaxChoices or zanncModMain.Choices
+end
 
 function GetBaseChoices()
     local baseChoices = game.GetTotalLootChoices()
