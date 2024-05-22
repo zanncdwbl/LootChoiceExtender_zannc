@@ -17,25 +17,42 @@ function sjson_ShellText(data)
 	end
 end
 
-function wrap_SetupMap(base)
-	print('Map is loading, here we might load some packages.')
-	-- game.LoadPackages({Name = package_name_string})
-	return base()
-end
-
-function GetTotalLootChoices_override()
-    return game.ScreenData.UpgradeChoice.MaxChoices or zanncModMain.Choices
-end
+-- function GetTotalLootChoices_override()
+--     return game.ScreenData.UpgradeChoice.MaxChoices or zanncModMain.Choices
+-- end
 
 function GetBaseChoices()
-    local baseChoices = GetTotalLootChoices_override()
-    zanncModMain.Choices = baseChoices
+    local baseChoices = game.GetTotalLootChoices()
     return baseChoices
 end
 
-function CreateUpgradeChoiceButton_wrap( screen, lootData, itemIndex, itemData )
+local printExecuted = false
 
-    
+function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, itemData )
+    local data = { }
+    local active = false
+
+    if not active and game.ActiveScreens.UpgradeChoice.SubjectName ~= "NPC_Arachne_01" then
+        if not printExecuted then
+            print("Not NPC")
+            printExecuted = true -- Set the flag to true after printing
+        end
+        active = true
+        -- local local_hades = modutil.Locals.Stacked( )
+
+        -- data.upgrade = local_hades.upgradeData
+        -- data.squash = 3/(3+config.ExtraChoices) -- I cannot do the previous excess method as it crashes when using rarity (I don't want to figure it out anymore)
+        -- -- I just want to be happy please
+        -- if args.Name == "BoonSlotBase" then
+        --     screen.ButtonSpacingY = 256 * (data.squash ^ 0.9)
+        --     local_hades.itemLocationY = local_hades.itemLocationY + 160 * (data.squash - 1)
+        --     args.Y = local_hades.itemLocationY
+        --     args.Scale = 1.0 * (data.squash ^ 0.7)
+        --     screen.Highlight.Scale = args.Scale -- Can't find a good way to do this
+        -- end
+    end
+    local component = base( screen, lootData, itemIndex, itemData ) 
+    return component
 end
 
 function DestroyBoonLootButtons_override( screen, lootData )
