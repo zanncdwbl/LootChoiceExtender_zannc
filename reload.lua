@@ -35,20 +35,41 @@ end
 
 function CreateUpgradeChoiceButton_wrap( screen, lootData, itemIndex, itemData )
 
-    -- modutil.mod.Path.Override("CalcNumLootChoices", function( )
-    --     local numChoices = ScreenData.UpgradeChoice.MaxChoices - GetNumMetaUpgrades("ReducedLootChoicesShrineUpgrade")
-    --     if (isGodLoot or treatAsGodLootByShops) and HasHeroTraitValue("RestrictBoonChoices") then
-    --         numChoices = numChoices - 1
-    --     end
-    --     return numChoices
-    -- end)
+    
+end
 
+function DestroyBoonLootButtons_override( screen, lootData )
+	local components = screen.Components
+	local toDestroy = {}
+	for index = 1, GetTotalLootChoices_override() do
+		local destroyIndexes = {
+		"PurchaseButton"..index,
+		"PurchaseButton"..index.. "Lock",
+		"PurchaseButton"..index.. "Highlight",
+		"PurchaseButton"..index.. "Icon",
+		"PurchaseButton"..index.. "ExchangeIcon",
+		"PurchaseButton"..index.. "ExchangeIconFrame",
+		"PurchaseButton"..index.. "QuestIcon",
+		"PurchaseButton"..index.. "ElementIcon",
+		"Backing"..index,
+		"PurchaseButton"..index.. "Frame",
+		"PurchaseButton"..index.. "Patch",
+		}
+		for i, indexName in pairs( destroyIndexes ) do
+			if components[indexName] then
+				table.insert(toDestroy, components[indexName].Id)
+				components[indexName] = nil
+			end
+		end
+	end
+	Destroy({ Ids = toDestroy })
+end
 
-    --Absolutely unsure how to fix arache etc, they use the same name and group, but their choices dont go up, unless I want to increase their choices too
+--Absolutely unsure how to fix arache etc, they use the same name and group, but their choices dont go up, unless I want to increase their choices too
     -- No reason to increase their choices at the moment.
     -- modutil.mod.Path.Wrap("CreateUpgradeChoiceButton", function ( screen, lootData, itemIndex, itemData )
-    --     -- local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
-    --     -- local highlight = ShallowCopyTable( screen.Highlight )
+        -- local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
+        -- local highlight = ShallowCopyTable( screen.Highlight )
 
         -- local data = { }
         -- local active = false
@@ -114,32 +135,3 @@ function CreateUpgradeChoiceButton_wrap( screen, lootData, itemIndex, itemData )
         --     return base( args )
         -- end)
     -- end)
-
-    -- modutil.mod.Path.Override("DestroyBoonLootButtons", function( screen, lootData )
-    --     local components = screen.Components
-    --     local toDestroy = {}
-    --     for index = 1, GetTotalLootChoices() do -- indexing to new max limit
-    --         local destroyIndexes = {
-    --         "PurchaseButton"..index,
-    --         "PurchaseButton"..index.. "Lock",
-    --         "PurchaseButton"..index.. "Highlight",
-    --         "PurchaseButton"..index.. "Icon",
-    --         "PurchaseButton"..index.. "ExchangeIcon",
-    --         "PurchaseButton"..index.. "ExchangeIconFrame",
-    --         "PurchaseButton"..index.. "QuestIcon",
-    --         "PurchaseButton"..index.. "ElementIcon",
-    --         "Backing"..index,
-    --         "PurchaseButton"..index.. "Frame",
-    --         "PurchaseButton"..index.. "Patch",
-    --         }
-    --         for i, indexName in pairs( destroyIndexes ) do
-    --             if components[indexName] then
-    --                 table.insert(toDestroy, components[indexName].Id)
-    --                 components[indexName] = nil
-    --             end
-    --         end
-    --     end
-    --     Destroy({ Ids = toDestroy })
-    -- end)
-end
-

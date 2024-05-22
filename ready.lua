@@ -17,20 +17,18 @@ modutil.mod.Path.Wrap("SetupMap", function(base)
 	return wrap_SetupMap(base)
 end)
 
--- game.OnControlPressed({'Gift', function()
--- 	return trigger_Gift()
--- end})
+OnAnyLoad{ function()
+    game.ScreenData.UpgradeChoice.MaxChoices = GetBaseChoices() + config.ExtraChoices
+end }
 
 modutil.mod.Path.Override("GetTotalLootChoices", function( )
     return GetTotalLootChoices_override()
 end)
 
-OnAnyLoad{ function()
-    game.ScreenData.UpgradeChoice.MaxChoices = GetBaseChoices() + config.ExtraChoices
-end }
+modutil.mod.Path.Wrap("CreateUpgradeChoiceButton", function(screen, lootData, itemIndex, itemData)
+	return CreateUpgradeChoiceButton_wrap(screen, lootData, itemIndex, itemData)
+end)
 
-
--- modutil.mod.Path.Wrap("CreateUpgradeChoiceButton", function(base, screen, lootData, itemIndex, itemData)
---     base(screen, lootData, itemIndex, itemData)
--- 	CreateUpgradeChoiceButton_wrap(screen, lootData, itemIndex, itemData)
--- end)
+modutil.mod.Path.Override("DestroyBoonLootButtons", function (screen, lootData)
+    return DestroyBoonLootButtons_override(screen, lootData)
+end)
