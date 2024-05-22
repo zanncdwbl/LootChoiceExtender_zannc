@@ -14,7 +14,7 @@ sjson.hook(file, function(data)
 end)
 
 OnAnyLoad{ function()
-    game.ScreenData.UpgradeChoice.MaxChoices = GetBaseChoices() + config.ExtraChoices
+    game.ScreenData.UpgradeChoice.MaxChoices = zanncModMain.Choices + config.ExtraChoices
     print("Max Choices Set To: " .. game.ScreenData.UpgradeChoice.MaxChoices)
 end }
 

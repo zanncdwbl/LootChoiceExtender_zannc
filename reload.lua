@@ -21,25 +21,51 @@ function GetTotalLootChoices_override()
     return game.ScreenData.UpgradeChoice.MaxChoices or zanncModMain.Choices
 end
 
-function GetBaseChoices()
-    local baseChoices = game.GetTotalLootChoices()
-    return baseChoices
-end
+-- function GetBaseChoices()
+--     local baseChoices = game.GetTotalLootChoices()
+--     return baseChoices
+-- end
 
-local printExecuted = false
+-- NPCs that I won't scale down or change amount of options
+local NPCsList = {
+    "NPC_Arachne_01",
+    "NPC_Narcissus_01",
+    "NPC_Echo_01",
+    "NPC_LordHades_01",
+    "NPC_Medea_01",
+    "NPC_Icarus_01",
+    "NPC_Circe_01"
+}
+
+function isNPC(subjectName)
+    for _, name in ipairs(NPCsList) do
+        if subjectName == name then
+            return true
+        end
+    end
+    return false
+end
 
 function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, itemData )
     local data = { }
     local active = false
 
-    if not active and game.ActiveScreens.UpgradeChoice.SubjectName ~= "NPC_Arachne_01" then
-        if not printExecuted then
-            print("Not NPC")
-            printExecuted = true -- Set the flag to true after printing
-        end
+    if not active and not isNPC(game.ActiveScreens.UpgradeChoice.SubjectName) then
         active = true
-        -- local local_hades = modutil.Locals.Stacked( )
 
+        --THIS PART DOESNT WORK, ERROR ABOUT LOCALS AND ITEM LOCATION BEING NIL
+        if game.ScreenData.UpgradeChoice.PurchaseButton.Name == "BoonSlotBase" then
+            local local_hades = modutil.Locals.Stacked()
+            data.upgrade = local_hades.upgradeData
+            data.squash = 3/(3+config.ExtraChoices) -- I cannot do the previous excess method as it crashes when using rarity (I don't want to figure it out anymore)
+
+            screen.ButtonSpacingY = 256 * (data.squash ^ 0.9)
+            local_hades.itemLocationY = local_hades.itemLocationY + 160 * (data.squash - 1)
+            game.purchaseButton.Y = local_hades.itemLocationY
+            game.purchaseButton.Scale = 1.0 * (data.squash ^ 0.7)
+            screen.Highlight.Scale = game.purchaseButton.Scale -- Can't find a good way to do this
+        end
+        
         -- data.upgrade = local_hades.upgradeData
         -- data.squash = 3/(3+config.ExtraChoices) -- I cannot do the previous excess method as it crashes when using rarity (I don't want to figure it out anymore)
         -- -- I just want to be happy please
