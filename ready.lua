@@ -13,9 +13,15 @@ sjson.hook(file, function(data)
 	return sjson_ShellText(data)
 end)
 
+zanncModMain = zanncModMain or {}
+zanncModMain.Choices = zanncModMain.Choices or 3
+
+game.ScreenData.UpgradeChoice.MaxChoices = zanncModMain.Choices + config.ExtraChoices
+local choices = game.ScreenData.UpgradeChoice.MaxChoices
+
 OnAnyLoad{ function()
-    game.ScreenData.UpgradeChoice.MaxChoices = zanncModMain.Choices + config.ExtraChoices
-    print("Max Choices Set To: " .. game.ScreenData.UpgradeChoice.MaxChoices)
+    print("Max Choices Set To: " .. choices)
+    return choices
 end }
 
 modutil.mod.Path.Override("GetTotalLootChoices", function( )
@@ -28,4 +34,45 @@ end)
 
 modutil.mod.Path.Override("DestroyBoonLootButtons", function (screen, lootData)
     return DestroyBoonLootButtons_override(screen, lootData)
+end)
+
+local excess = math.max(3, choices) - 3
+local squash = 3 / (3 + excess)
+
+local filegui = rom.path.combine(rom.paths.Content, 'Game/Obstacles/GUI.sjson')
+
+local order = {
+    'Name',
+    'InheritFrom',
+    'DisplayInEditor',
+    'Thing'
+}
+
+local newdata = sjson.to_object({
+    Name = "BoonSlotBaseExtraOptions",
+    InheritFrom = "BoonSlotBase",
+    DisplayInEditor = false,
+    Thing = {
+        TimeModifierFraction = 0.0,
+        EditorOutlineDrawBounds = false,
+        Graphic = "BoonSlotBase",
+        Interact =
+        {
+        HighlightOnAnimation = "null",
+        HighlightOffAnimation = "null",
+        },
+        Points = {
+            { X = -490, Y = 110 * squash },
+            { X = 600, Y = 110 * squash },
+            { X = 600, Y = -110 * squash },
+            { X = -490, Y = -110 * squash },
+        }
+    },
+}, order)
+
+sjson.hook(filegui, function(data)
+    print("Hook fired")
+    table.insert(data.Obstacles, newdata)
+    print(sjson.encode(data))
+    print("Hook Done")
 end)
