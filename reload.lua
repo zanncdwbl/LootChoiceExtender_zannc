@@ -46,30 +46,30 @@ function isNPC(subjectName)
     return false
 end
 
-function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, itemData )
-    local data = { }
-    local active = false
+-- function SetScale(subjectName)
+--     args.Fraction = data.iconScaling
+--     SetScaleY(args)
+--     args.Fraction = data.iconScaling*data.squashY
+--     return SetScaleX(args)
+-- end
 
+function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, itemData )
+    -- local data = { }
+    local active = false
+    
+    local upgradeOptions = lootData.UpgradeOptions
+    local excess = math.max(3, #upgradeOptions) - 3
+    local squash = 3 / (3 + excess)
+    
     if not active and not isNPC(game.ActiveScreens.UpgradeChoice.SubjectName) then
         active = true
-
-        --THIS PART DOESNT WORK, ERROR ABOUT LOCALS AND ITEM LOCATION BEING NIL
-        if game.ScreenData.UpgradeChoice.PurchaseButton.Name == "BoonSlotBase" then
-            game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 100
-        end
-        
-        -- data.upgrade = local_hades.upgradeData
-        -- data.squash = 3/(3+config.ExtraChoices) -- I cannot do the previous excess method as it crashes when using rarity (I don't want to figure it out anymore)
-        -- -- I just want to be happy please
-        -- if args.Name == "BoonSlotBase" then
-        --     screen.ButtonSpacingY = 256 * (data.squash ^ 0.9)
-        --     local_hades.itemLocationY = local_hades.itemLocationY + 160 * (data.squash - 1)
-        --     args.Y = local_hades.itemLocationY
-        --     args.Scale = 1.0 * (data.squash ^ 0.7)
-        --     screen.Highlight.Scale = args.Scale -- Can't find a good way to do this
-        -- end
+        --some crude shit just to test atp
+        game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 256 * squash
+        game.ActiveScreens.UpgradeChoice.PurchaseButton.Scale = 1 * squash
+        game.ActiveScreens.UpgradeChoice.Highlight.Scale = 1 * squash
     end
-    local component = base( screen, lootData, itemIndex, itemData ) 
+    
+    local component = base( screen, lootData, itemIndex, itemData )
     return component
 end
 
