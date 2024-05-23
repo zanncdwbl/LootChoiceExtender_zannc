@@ -63,7 +63,7 @@ end
 
 function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, itemData )
     -- local data = { }
-    -- local active = false
+    local active = false
     
     local upgradeOptions = lootData.UpgradeOptions
     local excess = math.max(3, #upgradeOptions) - 3
@@ -77,9 +77,9 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
         -- game.ActiveScreens.UpgradeChoice.QuestIconOffsetX = (-100 * squash) + 160
         -- game.ActiveScreens.UpgradeChoice.QuestIconOffsetY = (65 * squash) - 10
 
-        game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBaseExtraOptions"
-
+        
         local component = base( screen, lootData, itemIndex, itemData )
+        game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBaseExtraOptions"
         game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 256 * squash
         
         -- ==================================================================================================================
@@ -139,6 +139,11 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
         --     return base( args )
         -- end)
 
+        return component
+    else
+        -- active = false
+        game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBase"
+        local component = base( screen, lootData, itemIndex, itemData )
         return component
     end
 end
