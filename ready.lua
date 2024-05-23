@@ -50,7 +50,7 @@ local order = {
 
 local newdata = sjson.to_object({
     Name = "BoonSlotBaseExtraOptions",
-    InheritFrom = "BoonSlotBase",
+    InheritFrom = "BaseInteractableButton",
     DisplayInEditor = false,
     Thing = {
         TimeModifierFraction = 0.0,

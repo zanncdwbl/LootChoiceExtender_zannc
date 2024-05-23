@@ -77,9 +77,9 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
         -- game.ActiveScreens.UpgradeChoice.QuestIconOffsetX = (-100 * squash) + 160
         -- game.ActiveScreens.UpgradeChoice.QuestIconOffsetY = (65 * squash) - 10
 
+        game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBaseExtraOptions"
         
         local component = base( screen, lootData, itemIndex, itemData )
-        game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBaseExtraOptions"
         game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 256 * squash
         
         -- ==================================================================================================================
