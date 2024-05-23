@@ -46,31 +46,83 @@ function isNPC(subjectName)
     return false
 end
 
--- function SetScale(subjectName)
---     args.Fraction = data.iconScaling
---     SetScaleY(args)
---     args.Fraction = data.iconScaling*data.squashY
---     return SetScaleX(args)
--- end
-
 function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, itemData )
     -- local data = { }
-    local active = false
+    -- local active = false
     
     local upgradeOptions = lootData.UpgradeOptions
     local excess = math.max(3, #upgradeOptions) - 3
     local squash = 3 / (3 + excess)
     
-    if not active and not isNPC(game.ActiveScreens.UpgradeChoice.SubjectName) then
-        active = true
-        --some crude shit just to test atp
+    if not isNPC(game.ActiveScreens.UpgradeChoice.SubjectName) then
+        -- active = true
+        -- game.ScreenData.UpgradeChoice.PurchaseButton.Scale = 1 * squash
+        -- game.ScreenData.UpgradeChoice.Highlight.Scale = 1 * squash
+        -- game.ScreenData.UpgradeChoice.UpgradeButtons.Scale = 0.2
+
+        local component = base( screen, lootData, itemIndex, itemData )
         game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 256 * squash
-        game.ActiveScreens.UpgradeChoice.PurchaseButton.Scale = 1 * squash
-        game.ActiveScreens.UpgradeChoice.Highlight.Scale = 1 * squash
+
+        -- ==================================================================================================================
+        -- Doesn't work on either activescreen or screen data - fix later
+        -- ==================================================================================================================
+        -- Attempt to cap out the yaxis for location
+        -- local maxValue = 300  
+        -- local computedValue = 190 / (squash ^ (1/3))
+        -- local limitedValue = math.min(computedValue, maxValue)
+
+        -- local itemLocationY = (ScreenCenterY - (190 / limitedValue)) + game.ActiveScreens.UpgradeChoice.ButtonSpacingY * ( itemIndex - 1 )
+        -- game.ScreenData.UpgradeChoice.itemLocationY = itemLocationY
+
+        -- Setting Scale for buttons
+        local components = screen.Components
+        local purchaseButtonKey = "PurchaseButton"..itemIndex
+        
+        SetScale({ Id = components[purchaseButtonKey].Id, Fraction = squash, Duration = 0 })
+        
+        SetScale({ Id = components[purchaseButtonKey.."Highlight"].Id, Fraction = squash, Duration = 0 })
+        
+        SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
+        SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
+        
+        SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = squash, Duration = 0 })
+        SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = squash, Duration = 0 })
+        
+        if (components[purchaseButtonKey.."ElementIcon"] ~= nil) then
+            SetScaleX({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = squash, Duration = 0 })
+            SetScaleY({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = squash, Duration = 0 })
+        end
+        
+        if (components[purchaseButtonKey.."ExchangeSymbol"] ~= nil) then
+            SetScaleX({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = squash, Duration = 0 })
+            SetScaleY({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = squash, Duration = 0 })
+        end
+        
+        if (components[purchaseButtonKey.."QuestIcon"] ~= nil) then
+            SetScale({ Id = components[purchaseButtonKey].Id, Fraction = squash, Duration = 0 })
+            -- If I use ActiveScreens, then the first one doesn't move, others do
+            game.ScreenData.UpgradeChoice.QuestIconOffsetX = game.ScreenData.UpgradeChoice.QuestIconOffsetX * squash
+            game.ScreenData.UpgradeChoice.QuestIconOffsetY = game.ScreenData.UpgradeChoice.QuestIconOffsetY * squash
+            -- components[purchaseButtonKey.."QuestIcon"] = CreateScreenComponent({ Name = "BlankObstacle", Group = "Combat_Menu", X = game.itemLocationX + screen.QuestIconOffsetX * squash, Y = game.itemLocationY + screen.QuestIconOffsetY })
+        end
+
+        
+        -- modutil.mod.Path.Wrap("CreateTextBox", function( base, args )
+        --     if args.OffsetY then
+        --         args.OffsetY = args.OffsetY * squash
+        --     end
+        --     if args.OffsetX then
+        --         args.OffsetX = args.OffsetX * (squash ^ 0.6)
+        --     end
+        --     if args.FontSize then args.FontSize = args.FontSize * (squash ^ 0.5) end
+        --     -- if upgrade and args.Text == upgrade.CustomRarityName then 
+        --     --     modutil.Locals.Stacked( ).lineSpacing = 8*squash
+        --     -- end
+        --     return base( args )
+        -- end)
+
+        return component
     end
-    
-    local component = base( screen, lootData, itemIndex, itemData )
-    return component
 end
 
 function DestroyBoonLootButtons_override( screen, lootData )
