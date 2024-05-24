@@ -5,7 +5,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "zannc"
 name = "ExtendedChoice"
-versionNumber = "1.0.0"
+versionNumber = "1.0.1"
 description = "Hades 2 port of LootChoiceExtender from Hades 1 created by Magic_Gonads."
 websiteUrl = "https://github.com/zanncdwbl/zanncModMain_Hades"
 containsNsfwContent = false
