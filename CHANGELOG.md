@@ -1,7 +1,9 @@
 # Changelog
 
-## [Unreleased]
-
+## [Version 1]
 ### Added
-#### Version 1
 Full support for extended loot choices for gods - NPCs not included due to different system
+
+## [Unreleased]
+Support for NPCs?
+Better Scaling System
