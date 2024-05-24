@@ -93,7 +93,7 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
 
         return component
     else
-        -- active = false
+        -- For NPCs to not cry and crash the game
         game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBase"
         local component = base( screen, lootData, itemIndex, itemData )
         return component
