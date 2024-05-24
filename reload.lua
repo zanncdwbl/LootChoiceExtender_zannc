@@ -14,23 +14,8 @@ function sjson_ShellText(data)
 	end
 end
 
--- function sjson_GUI(data)
---     for _, v in ipairs(data.Obstacles) do
---         if v.Name == 'BoonSlotBase' then
---             v.Thing.Points = {
---                 { X = -490, Y = 110 },
---                 { X = 600, Y = 110 },
---                 { X = 600, Y = -50 },
---                 { X = -490, Y = -50 }
---             }
---             for _, point in ipairs(v.Thing.Points) do
---                 print(point.X, point.Y)
---             end
---             break
---         end
---     end
---     return data
--- end
+zanncModMain = zanncModMain or {}
+zanncModMain.Choices = zanncModMain.Choices or 3
 
 function GetTotalLootChoices_override()
     return game.ScreenData.UpgradeChoice.MaxChoices or zanncModMain.Choices
@@ -62,43 +47,40 @@ function isNPC(subjectName)
 end
 
 function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, itemData )
-    -- local data = { }
-    local active = false
-    
     local upgradeOptions = lootData.UpgradeOptions
     local excess = math.max(3, #upgradeOptions) - 3
     local squash = 3 / (3 + excess)
 
     if not isNPC(game.ActiveScreens.UpgradeChoice.SubjectName) then
-        -- active = true
-        -- game.ScreenData.UpgradeChoice.PurchaseButton.Scale = 1 * squash
-        -- game.ScreenData.UpgradeChoice.Highlight.Scale = 1 * squash
-        -- game.ScreenData.UpgradeChoice.UpgradeButtons.Scale = 0.2
-        -- game.ActiveScreens.UpgradeChoice.QuestIconOffsetX = (-100 * squash) + 160
-        -- game.ActiveScreens.UpgradeChoice.QuestIconOffsetY = (65 * squash) - 10
 
-        game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBaseExtraOptions"
+        if #upgradeOptions <= 3 then
+            game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBase"
+        else
+            game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBaseExtraOptions"
+        end
+
         
+        game.ScreenData.UpgradeChoice.RarityText.FontSize = 27 * squash
+        game.ScreenData.UpgradeChoice.TitleText.OffsetY = -60 * (squash ^ (1/3))
+        game.ScreenData.UpgradeChoice.RarityText.FontSize = 27 * squash
+        game.ScreenData.UpgradeChoice.RarityText.OffsetY = -60 * (squash ^ (1/3))
+
+        game.ScreenData.UpgradeChoice.DescriptionText.OffsetY = 40
+        game.ScreenData.UpgradeChoice.DescriptionText.FontSize = 20 * squash
+        game.ScreenData.UpgradeChoice.LineHeight = 35 * squash
+
+
         local component = base( screen, lootData, itemIndex, itemData )
         game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 256 * squash
-        
-        -- ==================================================================================================================
-        -- Doesn't work on either activescreen or screen data - fix later
-        -- ==================================================================================================================
-        -- Attempt to cap out the yaxis for location
-        -- local maxValue = 300  
-        -- local computedValue = 190 / (squash ^ (1/3))
-        -- local limitedValue = math.min(computedValue, maxValue)
-
-        -- local itemLocationY = (ScreenCenterY - (190 / limitedValue)) + game.ActiveScreens.UpgradeChoice.ButtonSpacingY * ( itemIndex - 1 )
-        -- game.ScreenData.UpgradeChoice.itemLocationY = itemLocationY
 
         -- Setting Scale for buttons
         local components = screen.Components
         local purchaseButtonKey = "PurchaseButton"..itemIndex
         
+        -- SetScaleX({ Id = components[purchaseButtonKey].Id, Fraction = (squash ^ (1/3)), Duration = 0 })
         SetScaleY({ Id = components[purchaseButtonKey].Id, Fraction = squash, Duration = 0 })
-        
+
+        -- SetScaleX({ Id = components[purchaseButtonKey.."Highlight"].Id, Fraction = (squash ^ (1/3)), Duration = 0 })
         SetScaleY({ Id = components[purchaseButtonKey.."Highlight"].Id, Fraction = squash, Duration = 0 })
         
         SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
@@ -124,7 +106,6 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
             -- components[purchaseButtonKey.."QuestIcon"] = CreateScreenComponent({ Name = "BlankObstacle", Group = "Combat_Menu", X = game.itemLocationX + screen.QuestIconOffsetX * squash, Y = game.itemLocationY + screen.QuestIconOffsetY })
         end
 
-        
         -- modutil.mod.Path.Wrap("CreateTextBox", function( base, args )
         --     if args.OffsetY then
         --         args.OffsetY = args.OffsetY * squash

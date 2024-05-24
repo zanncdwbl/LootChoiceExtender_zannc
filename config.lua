@@ -1,3 +1,4 @@
+---@meta zanncModMain-config
 return {
     enabled = true;
 

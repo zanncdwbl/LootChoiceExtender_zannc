@@ -31,7 +31,7 @@ chalk = mods["SGG_Modding-Chalk"]
 ---@module 'SGG_Modding-ReLoad'
 reload = mods['SGG_Modding-ReLoad']
 
----@module 'config'
+---@module 'zanncModMain-config'
 config = chalk.auto 'config.lua'
 -- ^ this updates our `.cfg` file in the config folder!
 public.config = config -- so other mods can access our config
