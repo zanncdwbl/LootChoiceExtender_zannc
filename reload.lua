@@ -57,6 +57,10 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
 
         game.ActiveScreens.UpgradeChoice.QuestIconOffsetY = 65 * squash
 
+        -- game.ScreenData.UpgradeChoice.IconOffsetY = 20
+        -- game.ScreenData.UpgradeChoice.ExchangeIconOffsetX = game.ScreenData.UpgradeChoice.IconOffsetX - 100
+        -- game.ScreenData.UpgradeChoice.ExchangeIconOffsetY = game.ScreenData.UpgradeChoice.IconOffsetY
+
         local component = base( screen, lootData, itemIndex, itemData )
         game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 256 * squash
 
