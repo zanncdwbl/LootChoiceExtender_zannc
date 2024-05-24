@@ -7,3 +7,4 @@ Full support for extended loot choices for gods - NPCs not included due to diffe
 ## [Unreleased]
 Support for NPCs?
 Better Scaling System
+Fix Rarify Animation
