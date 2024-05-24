@@ -7,12 +7,6 @@
 -- 	so you will most likely want to have it reference
 --	values and functions later defined in `reload.lua`.
 
-local file = rom.path.combine(rom.paths.Content, 'Game/Text/en/ShellText.en.sjson')
-
-sjson.hook(file, function(data)
-	return sjson_ShellText(data)
-end)
-
 zanncModMain = zanncModMain or {}
 zanncModMain.Choices = zanncModMain.Choices or 3
 
@@ -21,7 +15,7 @@ local choices = game.ScreenData.UpgradeChoice.MaxChoices
 
 OnAnyLoad{ function()
     print("Max Choices Set To: " .. choices)
-    return choices
+    game.ScreenData.UpgradeChoice.MaxChoices = choices
 end }
 
 modutil.mod.Path.Override("GetTotalLootChoices", function( )
@@ -36,6 +30,7 @@ modutil.mod.Path.Override("DestroyBoonLootButtons", function (screen, lootData)
     return DestroyBoonLootButtons_override(screen, lootData)
 end)
 
+-- Scaling button **hitbox** based on config option
 local excess = math.max(3, choices) - 3
 local squash = 3 / (3 + excess)
 

@@ -5,26 +5,12 @@
 -- this file will be reloaded if it changes during gameplay,
 -- 	so only assign to values or define things here.
 
-function sjson_ShellText(data)
-	for _,v in ipairs(data.Texts) do
-		if v.Id == 'MainMenuScreen_PlayGame' then
-			v.DisplayName = 'Test ' .. _PLUGIN.guid
-			break
-		end
-	end
-end
-
 zanncModMain = zanncModMain or {}
 zanncModMain.Choices = zanncModMain.Choices or 3
 
 function GetTotalLootChoices_override()
     return game.ScreenData.UpgradeChoice.MaxChoices or zanncModMain.Choices
 end
-
--- function GetBaseChoices()
---     local baseChoices = game.GetTotalLootChoices()
---     return baseChoices
--- end
 
 -- NPCs that I won't scale down or change amount of options
 local NPCsList = {
@@ -59,16 +45,17 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
             game.ActiveScreens.UpgradeChoice.PurchaseButton.Name = "BoonSlotBaseExtraOptions"
         end
 
-        
-        game.ScreenData.UpgradeChoice.RarityText.FontSize = 27 * squash
-        game.ScreenData.UpgradeChoice.TitleText.OffsetY = -60 * (squash ^ (1/3))
-        game.ScreenData.UpgradeChoice.RarityText.FontSize = 27 * squash
-        game.ScreenData.UpgradeChoice.RarityText.OffsetY = -60 * (squash ^ (1/3))
+        -- Text Scaling
+        game.ActiveScreens.UpgradeChoice.TitleText.FontSize = 27 * (squash ^ (1/3))
+        game.ActiveScreens.UpgradeChoice.TitleText.OffsetY = -60 * squash
 
-        game.ScreenData.UpgradeChoice.DescriptionText.OffsetY = 40
-        game.ScreenData.UpgradeChoice.DescriptionText.FontSize = 20 * squash
-        game.ScreenData.UpgradeChoice.LineHeight = 35 * squash
+        game.ActiveScreens.UpgradeChoice.RarityText.FontSize = 27 * (squash ^ (1/3))
+        game.ActiveScreens.UpgradeChoice.RarityText.OffsetY = -60 * squash
 
+        game.ActiveScreens.UpgradeChoice.DescriptionText.FontSize = 20 * (squash ^ (1/3))
+        game.ActiveScreens.UpgradeChoice.DescriptionText.OffsetY = -35 * squash
+
+        game.ActiveScreens.UpgradeChoice.QuestIconOffsetY = 65 * squash
 
         local component = base( screen, lootData, itemIndex, itemData )
         game.ActiveScreens.UpgradeChoice.ButtonSpacingY = 256 * squash
@@ -77,17 +64,15 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
         local components = screen.Components
         local purchaseButtonKey = "PurchaseButton"..itemIndex
         
-        -- SetScaleX({ Id = components[purchaseButtonKey].Id, Fraction = (squash ^ (1/3)), Duration = 0 })
         SetScaleY({ Id = components[purchaseButtonKey].Id, Fraction = squash, Duration = 0 })
 
-        -- SetScaleX({ Id = components[purchaseButtonKey.."Highlight"].Id, Fraction = (squash ^ (1/3)), Duration = 0 })
         SetScaleY({ Id = components[purchaseButtonKey.."Highlight"].Id, Fraction = squash, Duration = 0 })
         
-        SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
-        SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
+        SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
+        SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
         
-        SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = squash, Duration = 0 })
-        SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = squash, Duration = 0 })
+        SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
+        SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
         
         if (components[purchaseButtonKey.."ElementIcon"] ~= nil) then
             SetScaleX({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = squash, Duration = 0 })
@@ -105,20 +90,6 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
             -- If I use ActiveScreens, then the first one doesn't move, others do
             -- components[purchaseButtonKey.."QuestIcon"] = CreateScreenComponent({ Name = "BlankObstacle", Group = "Combat_Menu", X = game.itemLocationX + screen.QuestIconOffsetX * squash, Y = game.itemLocationY + screen.QuestIconOffsetY })
         end
-
-        -- modutil.mod.Path.Wrap("CreateTextBox", function( base, args )
-        --     if args.OffsetY then
-        --         args.OffsetY = args.OffsetY * squash
-        --     end
-        --     if args.OffsetX then
-        --         args.OffsetX = args.OffsetX * (squash ^ 0.6)
-        --     end
-        --     if args.FontSize then args.FontSize = args.FontSize * (squash ^ 0.5) end
-        --     -- if upgrade and args.Text == upgrade.CustomRarityName then 
-        --     --     modutil.Locals.Stacked( ).lineSpacing = 8*squash
-        --     -- end
-        --     return base( args )
-        -- end)
 
         return component
     else
@@ -155,74 +126,3 @@ function DestroyBoonLootButtons_override( screen, lootData )
 	end
 	Destroy({ Ids = toDestroy })
 end
-
---Absolutely unsure how to fix arache etc, they use the same name and group, but their choices dont go up, unless I want to increase their choices too
-    -- No reason to increase their choices at the moment.
-    -- modutil.mod.Path.Wrap("CreateUpgradeChoiceButton", function ( screen, lootData, itemIndex, itemData )
-        -- local purchaseButton = ShallowCopyTable( screen.PurchaseButton )
-        -- local highlight = ShallowCopyTable( screen.Highlight )
-
-        -- local data = { }
-        -- local active = false
-
-        -- -- modutil.mod.Path.Wrap("CreateScreenComponent", function ( base, args )
-        --     if not active and args.Group == "Combat_Menu" then
-        --         active = true
-        --         local local_hades = modutil.Locals.Stacked( )
-
-        --         data.upgrade = local_hades.upgradeData
-        --         data.squash = 3/(3+config.ExtraChoices) -- I cannot do the previous excess method as it crashes when using rarity (I don't want to figure it out anymore)
-        --         -- I just want to be happy please
-        --         if args.Name == "BoonSlotBase" then
-        --             screen.ButtonSpacingY = 256 * (data.squash ^ 0.9)
-        --             local_hades.itemLocationY = local_hades.itemLocationY + 160 * (data.squash - 1)
-        --             args.Y = local_hades.itemLocationY
-        --             args.Scale = 1.0 * (data.squash ^ 0.7)
-        --             screen.Highlight.Scale = args.Scale -- Can't find a good way to do this
-        --         end
-        --         -- Icons etc cause I can't find a good way to do this either
-        --         if data.upgrade.Icon ~= nil then
-        --             local icon = screen.Icon
-        --             icon.X = (screen.IconOffsetX + local_hades.itemLocationX + screen.ButtonOffsetX) * data.squash -- Doesn't even work lol
-        --             icon.Scale = 0.6 * (data.squash ^ 0.7)
-
-        --             screen.Frame.X = icon.X
-        --             screen.Frame.Scale = screen.Icon.Scale
-        --         end
-        --         -- if args.Name == "BlankObstacle" then
-        --         --     local_hades.itemLocationY = local_hades.itemLocationY + 100 * (data.squash - 1)
-        --         --     args.Y = local_hades.itemLocationY
-        --         --     args.Scale = 1.0 * (data.squash ^ 0.4)
-        --         -- end
-        --     end
-        --     local component = base( args ) 
-        --     return component
-        -- end)
-
-        -- if purchaseButton.Group == "Combat_Menu" then -- hopefully to stop breaking the codex/arachne/echo etc
-            -- if purchaseButton.Name == "BoonSlotBase" then
-            --     screen.ButtonSpacingY = ScreenData.UpgradeChoice.ButtonSpacingY * (data.squash ^ (1/3)) -- Spacing between buttons automatically to scale - Lower 0.8 for more space
-            --     -- modutil.mod.Path.Wrap("CreateScreenComponent", function (base, args)
-                    
-            --     -- end)
-
-            --     -- screen.PurchaseButton.Y = itemLocationY -- dunno if i need this but will keep so location stops crying
-            --     screen.PurchaseButton.Scale = 1.0 * (data.squash ^ (1/3)) -- Scaling the buttons, unsure how to get it to scale (specifically the X scaling) nicely like in hades 1 - increase 0.8 for harsher scaling
-            --     screen.Highlight.Scale = screen.PurchaseButton.Scale -- same as purchaseButton scaling
-            -- end
-        -- end
-
-        -- modutil.mod.Path.Wrap("CreateTextBox", function( base, args )
-        --     if args.OffsetY then
-        --         args.OffsetY = args.OffsetY * data.squash
-        --     end
-        --     if args.OffsetX then
-        --         args.OffsetX = args.OffsetX * (data.squash ^ 0.6)
-        --     end
-        --     if args.FontSize then args.FontSize = args.FontSize * (data.squash ^ 0.5) end
-        --     if data.upgrade and args.Text == data.upgrade.CustomRarityName then 
-        --         modutil.Locals.Stacked( ).lineSpacing = 8*data.squash
-        --     end
-        --     return base( args )
-        -- end)
-    -- end)

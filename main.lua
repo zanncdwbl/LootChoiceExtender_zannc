@@ -26,11 +26,6 @@ sjson = mods['SGG_Modding-SJSON']
 ---@module 'SGG_Modding-ModUtil'
 modutil = mods['SGG_Modding-ModUtil']
 
----@module 'SGG_Modding-Chalk'
-chalk = mods["SGG_Modding-Chalk"]
----@module 'SGG_Modding-ReLoad'
-reload = mods['SGG_Modding-ReLoad']
-
 ---@module 'zanncModMain-config'
 config = chalk.auto 'config.lua'
 -- ^ this updates our `.cfg` file in the config folder!
