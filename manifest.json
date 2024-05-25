@@ -4,7 +4,7 @@
     "description": "Hades 2 port of LootChoiceExtender from Hades 1 created by Magic_Gonads -- with massive help from ellomenop from the Hades Modding Discord",
     "version_number": "1.0.0",
     "dependencies": [
-        "Hell2Modding-Hell2Modding-1.0.28",
+        "Hell2Modding-Hell2Modding-1.0.29",
         "SGG_Modding-ModUtil-3.1.1",
         "SGG_Modding-Chalk-2.1.1",
         "SGG_Modding-SJSON-1.0.0",
