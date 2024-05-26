@@ -68,6 +68,6 @@ local newdata = sjson.to_object({
 sjson.hook(filegui, function(data)
     print("Hook fired")
     table.insert(data.Obstacles, newdata)
-    print(sjson.encode(data))
+    -- print(sjson.encode(data))
     print("Hook Done")
 end)

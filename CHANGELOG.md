@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+Removed Table Log<br>
+Scaled Element Icons<br>
+Updated to 1.0.30 for H2M
 
 ## [1.0.1] - 2024-05-24
 
@@ -10,11 +13,11 @@
 
 Full support for extended loot choices for gods - NPCs not included due to different system
 
-## [Unreleased]
-
-Support for NPCs?
-Better Scaling System
-Fix Rarify Animation
+## [Planned]
+Support for NPCs? <br>
+Better Scaling System <br>
+Fix Rarify Animation <br>
+Properly Fix Trait Replacement
 
 [unreleased]: https://github.com/zanncdwbl/zanncModMain_Hades/compare/1.0.1...HEAD
 [1.0.1]: https://github.com/zanncdwbl/zanncModMain_Hades/compare/1.0.0...1.0.1

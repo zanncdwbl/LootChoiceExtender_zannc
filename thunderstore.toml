@@ -5,14 +5,14 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "zannc"
 name = "ExtendedChoice"
-versionNumber = "1.0.1"
-description = "Hades 2 port of LootChoiceExtender from Hades 1 created by Magic_Gonads."
-websiteUrl = "https://github.com/zanncdwbl/zanncModMain_Hades"
+versionNumber = "1.0.2"
+description = "Hades 2 port of LootChoiceExtender from Hades 1 created by Magic_Gonads -- with massive help from ellomenop from the Hades Modding Discord."
+websiteUrl = "https://github.com/zanncdwbl/LootChoiceExtender_zannc"
 containsNsfwContent = false
 
 [package.dependencies]
 SGG_Modding-ModUtil = "3.1.1"
-Hell2Modding-Hell2Modding = "1.0.29"
+Hell2Modding-Hell2Modding = "1.0.30"
 SGG_Modding-Chalk = "2.1.1"
 SGG_Modding-SJSON = "1.0.0"
 SGG_Modding-ReLoad = "1.0.2"
