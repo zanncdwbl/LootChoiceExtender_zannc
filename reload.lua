@@ -57,6 +57,8 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
 
         game.ActiveScreens.UpgradeChoice.QuestIconOffsetY = 65 * squash
 
+        screen.ElementIcon.YShift = game.ScreenData.UpgradeChoice.ElementIcon.YShift * (squash ^ (1/3))
+
         -- game.ScreenData.UpgradeChoice.IconOffsetY = 20
         -- game.ScreenData.UpgradeChoice.ExchangeIconOffsetX = game.ScreenData.UpgradeChoice.IconOffsetX - 100
         -- game.ScreenData.UpgradeChoice.ExchangeIconOffsetY = game.ScreenData.UpgradeChoice.IconOffsetY
@@ -68,41 +70,39 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
         local components = screen.Components
         local purchaseButtonKey = "PurchaseButton"..itemIndex
         
-        SetScaleY({ Id = components[purchaseButtonKey].Id, Fraction = squash, Duration = 0 })
+        if components[purchaseButtonKey] ~= nil then
+            SetScaleY({ Id = components[purchaseButtonKey].Id, Fraction = squash, Duration = 0 })
 
-        SetScaleY({ Id = components[purchaseButtonKey.."Highlight"].Id, Fraction = squash, Duration = 0 })
-        
-        SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
-        SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
-        
-        SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
-        SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
-        
-        if (components[purchaseButtonKey.."ElementIcon"] ~= nil) then
-            SetScaleX({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = squash, Duration = 0 })
-            SetScaleY({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = squash, Duration = 0 })
-        end
-        
-        if (components[purchaseButtonKey.."ExchangeSymbol"] ~= nil) then
-            SetScaleX({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = squash, Duration = 0 })
-            SetScaleY({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = squash, Duration = 0 })
-        end
+            SetScaleY({ Id = components[purchaseButtonKey.."Highlight"].Id, Fraction = squash, Duration = 0 })
+            
+            SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
+            SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
+            
+            SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = squash, Duration = 0 })
+            SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = squash, Duration = 0 })
+            
+            if (components[purchaseButtonKey.."ElementIcon"] ~= nil) then
+                SetScaleX({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = squash, Duration = 0 })
+                SetScaleY({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = squash, Duration = 0 })
+            end
+            
+            if (components[purchaseButtonKey.."ExchangeSymbol"] ~= nil) then
+                SetScaleX({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = squash, Duration = 0 })
+                SetScaleY({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = squash, Duration = 0 })
 
-        if (components[purchaseButtonKey.."ExchangeIcon"] ~= nil) then
-            SetScaleX({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
-            SetScaleY({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
-        end
+                SetScaleX({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Fraction = squash, Duration = 0 })
+                SetScaleY({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Fraction = squash, Duration = 0 })
 
-        if (components[purchaseButtonKey.."ExchangeIconFrame"] ~= nil) then
-            SetScaleX({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
-            SetScaleY({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
-        end
+                SetScaleX({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Fraction = squash, Duration = 0 })
+                SetScaleY({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Fraction = squash, Duration = 0 })
+            end
 
-        if (components[purchaseButtonKey.."QuestIcon"] ~= nil) then
-            SetScaleX({ Id = components[purchaseButtonKey.."QuestIcon"].Id, Fraction = (squash ^ (1/3)) , Duration = 0 })
-            SetScaleY({ Id = components[purchaseButtonKey.."QuestIcon"].Id, Fraction = (squash ^ (1/3)), Duration = 0 })
-            -- If I use ActiveScreens, then the first one doesn't move, others do
-            -- components[purchaseButtonKey.."QuestIcon"] = CreateScreenComponent({ Name = "BlankObstacle", Group = "Combat_Menu", X = game.itemLocationX + screen.QuestIconOffsetX * squash, Y = game.itemLocationY + screen.QuestIconOffsetY })
+            if (components[purchaseButtonKey.."QuestIcon"] ~= nil) then
+                SetScaleX({ Id = components[purchaseButtonKey.."QuestIcon"].Id, Fraction = (squash ^ (1/3)) , Duration = 0 })
+                SetScaleY({ Id = components[purchaseButtonKey.."QuestIcon"].Id, Fraction = (squash ^ (1/3)), Duration = 0 })
+            end
+        else
+            print("Purchase Button Key is nil, error occured, using default boon creation - if you see this make an issue report")
         end
 
         return component

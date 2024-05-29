@@ -14,7 +14,6 @@ game.ScreenData.UpgradeChoice.MaxChoices = zanncModMain.Choices + config.ExtraCh
 local choices = game.ScreenData.UpgradeChoice.MaxChoices
 
 OnAnyLoad{ function()
-    print("Max Choices Set To: " .. choices)
     game.ScreenData.UpgradeChoice.MaxChoices = choices
 end }
 
@@ -66,8 +65,5 @@ local newdata = sjson.to_object({
 }, order)
 
 sjson.hook(filegui, function(data)
-    print("Hook fired")
     table.insert(data.Obstacles, newdata)
-    -- print(sjson.encode(data))
-    print("Hook Done")
 end)
