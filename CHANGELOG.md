@@ -23,7 +23,8 @@ Full support for extended loot choices for gods - NPCs not included due to diffe
 Support for NPCs? <br>
 Better Scaling System <br>
 Fix Rarify Animation <br>
-Properly Fix Trait Replacement
+Properly Fix Trait Replacement\
+Refactor Code to cleanup
 
 [unreleased]: https://github.com/zanncdwbl/LootChoiceExtender_zannc/compare/1.0.2...HEAD
 [1.0.2]: https://github.com/zanncdwbl/LootChoiceExtender_zannc/compare/1.0.1...1.0.2

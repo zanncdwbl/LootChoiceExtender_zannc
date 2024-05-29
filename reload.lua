@@ -75,11 +75,11 @@ function CreateUpgradeChoiceButton_wrap( base, screen, lootData, itemIndex, item
 
             SetScaleY({ Id = components[purchaseButtonKey.."Highlight"].Id, Fraction = squash, Duration = 0 })
             
-            SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
-            SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = squash, Duration = 0 })
+            SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
+            SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
             
-            SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = squash, Duration = 0 })
-            SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = squash, Duration = 0 })
+            SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
+            SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = (squash ^ (2/3)), Duration = 0 })
             
             if (components[purchaseButtonKey.."ElementIcon"] ~= nil) then
                 SetScaleX({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = squash, Duration = 0 })
