@@ -15,11 +15,9 @@ Updated to 1.0.30 for H2M
 ## [1.0.0] - 2024-05-24
 
 ### Added
-
 Full support for extended loot choices for gods - NPCs not included due to different system
 
 ## [Planned]
-
 Support for NPCs? <br>
 Better Scaling System <br>
 Fix Rarify Animation <br>
