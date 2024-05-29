@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 Updated to H2M version 1.0.33\
-Added if boon is nil use default to avoid game crashes - I hope\
+Added if boon is nil use default to avoid game crashes - I hope
 
 ## [1.0.2] - 2024-05-26
 
