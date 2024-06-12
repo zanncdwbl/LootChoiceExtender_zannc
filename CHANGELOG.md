@@ -4,7 +4,7 @@
 
 ## [1.0.3] - 2024-05-29
 
-Updated to H2M version 1.0.33\\
+Updated to H2M version 1.0.33 <br>
 Added if boon is nil use default to avoid game crashes - I hope
 
 ## [1.0.2] - 2024-05-26
