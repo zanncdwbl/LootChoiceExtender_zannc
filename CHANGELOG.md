@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+Refactor of code - you can now change amount of boons to spawn in a room and have it update for the next room (limited to this method due to hitboxes)
+
 
 ## [1.0.3] - 2024-05-29
 

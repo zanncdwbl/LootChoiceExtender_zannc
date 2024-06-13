@@ -34,27 +34,36 @@ reload = mods['SGG_Modding-ReLoad']
 
 ---@module 'zanncModMain-config'
 config = chalk.auto 'config.lua'
--- ^ this updates our `.cfg` file in the config folder!
-public.config = config -- so other mods can access our config
+public.config = config
 
 local function on_ready()
-	-- what to do when we are ready, but not re-do on reload.
-	if config.enabled == false then return end
-	import_as_fallback(rom.game)
-	import 'ready.lua'
+    if config.enabled == false then return end
+
+    rom.gui.add_imgui(function()
+        if rom.ImGui.Begin("Configure") then
+            rom.ImGui.Text("Number of reward choices:")
+
+            local value, clicked = rom.ImGui.SliderInt("", config.DisplayedChoices, 3, 12)
+            if clicked then
+                config.DisplayedChoices = value
+            end
+
+            rom.ImGui.End()
+        end
+    end)
+
+    import_as_fallback(rom.game)
+    import 'sjson.lua'
+    import 'ready.lua'
 end
 
 local function on_reload()
-	-- what to do when we are ready, but also again on every reload.
-	-- only do things that are safe to run over and over.
-	import_as_fallback(rom.game)
-	import 'reload.lua'
+    import_as_fallback(rom.game)
+    import 'reload.lua'
 end
 
--- this allows us to limit certain functions to not be reloaded.
 local loader = reload.auto_single()
 
--- this runs only when modutil and the game's lua is ready
-modutil.on_ready_final(function()
-	loader.load(on_ready, on_reload)
+modutil.once_loaded.game(function()
+    loader.load(on_ready, on_reload)
 end)
