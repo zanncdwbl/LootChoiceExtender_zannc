@@ -1,5 +1,5 @@
 # Deprecated
-Use ellomenop's version of the mod found here https://github.com/ellomenop/Hades2-LootChoiceExtension/tree/main or https://thunderstore.io/c/hades-ii/p/ellomenop/LootChoiceExtension/
+Use ellomenop's version of the mod found here:<br> https://github.com/ellomenop/Hades2-LootChoiceExtension/tree/main // https://thunderstore.io/c/hades-ii/p/ellomenop/LootChoiceExtension/
 
 # LootChoiceExtender Mod
 A Hades 2 Mod created to extend the amount of boon choices from the default 3. <br>
